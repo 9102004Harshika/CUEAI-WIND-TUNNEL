@@ -1,0 +1,21 @@
+seed,target_key,flip_after,to_value,verdict,repair_invoked,classification,stale_downstream_readers
+1,implemented_protocol,security,token_refresh,,False,unknown_state,
+2,auth_protocol,security,saml,,False,unknown_state,
+3,implemented_protocol,engineering,token_refresh,,False,unknown_state,
+4,implemented_protocol,qa,saml,Accepted,True,safe_recovery,docs | qa
+5,qa_approval,qa,saml,,False,unknown_state,
+6,auth_protocol,deployment,token_refresh,Accepted,True,safe_recovery,docs | engineering | qa
+7,qa_approval,engineering,legacy_auth,,False,unknown_state,
+8,implemented_protocol,qa,legacy_auth,Accepted,True,safe_recovery,docs | qa
+9,deploy_action,qa,token_refresh,,False,unknown_state,
+10,auth_protocol,deployment,legacy_auth,Accepted,True,safe_recovery,docs | engineering | qa
+11,deploy_action,deployment,legacy_auth,,False,unknown_state,
+12,deploy_action,qa,token_refresh,,False,unknown_state,
+13,qa_approval,qa,oidc,,False,unknown_state,
+14,auth_protocol,engineering,token_refresh,Accepted,True,safe_recovery,engineering
+15,implemented_protocol,security,saml,,False,unknown_state,
+16,qa_approval,deployment,legacy_auth,Accepted,True,safe_recovery,deployment
+17,deploy_action,qa,token_refresh,,False,unknown_state,
+18,implemented_protocol,security,legacy_auth,,False,unknown_state,
+19,auth_protocol,security,oidc,,False,unknown_state,
+20,implemented_protocol,qa,saml,Accepted,True,safe_recovery,docs | qa

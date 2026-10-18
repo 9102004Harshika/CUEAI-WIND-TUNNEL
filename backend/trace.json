@@ -1,0 +1,122 @@
+[
+  {
+    "id": "c430905c-0359-48c3-bd2e-1ba4f83b0e18",
+    "agent_id": "security",
+    "statement": "Security team decided on oauth for SSO authentication",
+    "key": "auth_protocol",
+    "value": "oauth",
+    "version": 1,
+    "created_at": 1789914331.6508334,
+    "supersedes": null,
+    "revoked": false,
+    "event_type": "commitment"
+  },
+  {
+    "id": "11dc2b6e-b8a6-4dda-a705-fee7cc0b65d3",
+    "agent_id": "engineering",
+    "statement": "Engineering implemented oauth authentication module",
+    "key": "implemented_protocol",
+    "value": "oauth",
+    "version": 1,
+    "created_at": 1789914331.6508334,
+    "supersedes": null,
+    "revoked": false,
+    "event_type": "commitment"
+  },
+  {
+    "id": "78279e0e-cea7-49a7-b713-29d7e5f9e664",
+    "agent_id": "engineering",
+    "action_type": "implement_sso",
+    "reads": [
+      "c430905c-0359-48c3-bd2e-1ba4f83b0e18"
+    ],
+    "reads_versions": [
+      1
+    ],
+    "executed_at": 1789914331.6508334,
+    "payload": {
+      "protocol": "oauth"
+    },
+    "event_type": "action"
+  },
+  {
+    "id": "3b4490f5-c5f8-48df-a524-10ddc470f49c",
+    "agent_id": "qa",
+    "statement": "QA approved the oauth implementation",
+    "key": "qa_approval",
+    "value": "approved",
+    "version": 1,
+    "created_at": 1789914331.6508334,
+    "supersedes": null,
+    "revoked": false,
+    "event_type": "commitment"
+  },
+  {
+    "id": "a2caae77-54d9-45e0-a86d-5c38c4a96582",
+    "agent_id": "qa",
+    "action_type": "qa_review",
+    "reads": [
+      "11dc2b6e-b8a6-4dda-a705-fee7cc0b65d3",
+      "c430905c-0359-48c3-bd2e-1ba4f83b0e18"
+    ],
+    "reads_versions": [
+      1,
+      1
+    ],
+    "executed_at": 1789914331.6508334,
+    "payload": {
+      "status": "approved",
+      "protocol_reviewed": "oauth"
+    },
+    "event_type": "action"
+  },
+  {
+    "id": "7954ab61-95f3-4513-b382-8020efc34b08",
+    "agent_id": "deployment",
+    "action_type": "deploy_service",
+    "reads": [
+      "3b4490f5-c5f8-48df-a524-10ddc470f49c"
+    ],
+    "reads_versions": [
+      1
+    ],
+    "executed_at": 1789914331.6508334,
+    "payload": {
+      "service": "sso-module",
+      "environment": "production"
+    },
+    "event_type": "action"
+  },
+  {
+    "id": "73df76f2-eb25-4908-8015-3566a4d9fed4",
+    "agent_id": "docs",
+    "statement": "Documentation written for oauth SSO integration",
+    "key": "implemented_protocol",
+    "value": "oauth",
+    "version": 2,
+    "created_at": 1789914331.6508334,
+    "supersedes": "11dc2b6e-b8a6-4dda-a705-fee7cc0b65d3",
+    "revoked": false,
+    "event_type": "commitment"
+  },
+  {
+    "id": "770e542f-0942-432b-812f-73bf25fb03e5",
+    "agent_id": "docs",
+    "action_type": "write_docs",
+    "reads": [
+      "c430905c-0359-48c3-bd2e-1ba4f83b0e18"
+    ],
+    "reads_versions": [
+      1
+    ],
+    "executed_at": 1789914331.6508334,
+    "payload": {
+      "protocol": "oauth",
+      "pages": [
+        "setup-guide",
+        "api-reference"
+      ]
+    },
+    "event_type": "action"
+  }
+]

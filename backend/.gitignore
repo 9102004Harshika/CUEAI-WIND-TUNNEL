@@ -1,0 +1,12 @@
+.env
+*.env
+env.yaml
+__pycache__/
+*.pyc
+.pytest_cache/
+daily_budget.json
+node_modules/
+dist/
+*.zip
+scratch/
+*.log

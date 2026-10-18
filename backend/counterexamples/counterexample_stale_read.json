@@ -1,0 +1,22 @@
+{
+  "id": "cx-stale-read-01",
+  "scenario_name": "SSO Protocol Handshake",
+  "description": "Security updates protocol from OAuth to SAML after Engineering has already read OAuth. Results in split-brain state where implemented protocol differs from current auth protocol.",
+  "seed": 42,
+  "mutations": [
+    {
+      "type": "content_flip",
+      "target_agent": "security",
+      "target_key": "auth_protocol",
+      "params": {
+        "new_value": "saml",
+        "flip_after": "engineering"
+      }
+    }
+  ],
+  "expected_invariants": [
+    "no_downstream_disagreement"
+  ],
+  "expected_verdict": "ACCEPTED",
+  "decline_reason": null
+}

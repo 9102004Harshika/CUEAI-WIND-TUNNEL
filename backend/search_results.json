@@ -1,0 +1,13 @@
+[
+  {
+    "found": true,
+    "first_failure_step": 2,
+    "mutation": "Deliver 'qa_approval' twice to deployment",
+    "mutation_type": "duplicate",
+    "complexity": 1.5,
+    "invariant": "no_duplicate_execution",
+    "violation": "deployment executed 'deploy_service' twice with the same read set",
+    "shrunk": true,
+    "elapsed": 0.11453771591186523
+  }
+]

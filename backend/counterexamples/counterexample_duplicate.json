@@ -1,0 +1,19 @@
+{
+  "id": "cx-duplicate-02",
+  "scenario_name": "SSO Protocol Handshake",
+  "description": "Network duplication delivers the exact same task twice to Deployment agent with identical input read versions. Action executes twice, violating exactly-once semantics.",
+  "seed": 108,
+  "mutations": [
+    {
+      "type": "duplicate",
+      "target_agent": "deployment",
+      "target_key": "deploy_action",
+      "params": {}
+    }
+  ],
+  "expected_invariants": [
+    "no_duplicate_execution"
+  ],
+  "expected_verdict": "DECLINED",
+  "decline_reason": "Duplicate execution already occurred in history. Simulating re-execution cannot undo already-committed side effects."
+}

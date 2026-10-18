@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CUE Wind Tunnel - AI Agent Multi-Agent Stress Testing</title>
+    <!-- Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <!-- Tailwind CSS with CDN Configuration -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              background: "#121318",
+              error: "#ffb4ab",
+              "on-surface-variant": "#cfc2d6",
+              "on-primary": "#490080",
+              "on-secondary-fixed-variant": "#004e5c",
+              "on-primary-fixed": "#2c0051",
+              secondary: "#4cd7f6",
+              "surface-container": "#1e1f25",
+              "outline-variant": "#4d4354",
+              "on-error-container": "#ffdad6",
+              "surface-container-highest": "#34343a",
+              "on-tertiary-container": "#00311f",
+              "secondary-container": "#03b5d3",
+              "on-tertiary-fixed-variant": "#005236",
+              tertiary: "#4edea3",
+              "on-tertiary-fixed": "#002113",
+              "surface-container-low": "#1a1b21",
+              "surface-dim": "#121318",
+              "surface-container-lowest": "#0d0e13",
+              "tertiary-container": "#00a572",
+              "on-primary-container": "#400071",
+              "secondary-fixed": "#acedff",
+              "inverse-surface": "#e3e1e9",
+              "surface-container-high": "#292a2f",
+              "surface-tint": "#ddb7ff",
+              "on-primary-fixed-variant": "#6900b3",
+              "primary-container": "#b76dff",
+              "surface-variant": "#34343a",
+              "inverse-primary": "#842bd2",
+              "error-container": "#93000a",
+              "on-secondary-container": "#00424e",
+              "on-tertiary": "#003824",
+              "inverse-on-surface": "#2f3036",
+              "tertiary-fixed": "#6ffbbe",
+              "primary-fixed-dim": "#ddb7ff",
+              "on-background": "#e3e1e9",
+              primary: "#ddb7ff",
+              surface: "#121318",
+              "on-secondary-fixed": "#001f26",
+              "on-surface": "#e3e1e9",
+              "surface-bright": "#38393f",
+              "secondary-fixed-dim": "#4cd7f6",
+              "primary-fixed": "#f0dbff",
+              "on-error": "#690005",
+              "on-secondary": "#003640",
+              "tertiary-fixed-dim": "#4edea3",
+              outline: "#988d9f"
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem"
+            },
+            spacing: {
+              margin: "1rem",
+              gutter: "1rem",
+              "space-md": "0.75rem",
+              "space-xs": "0.25rem",
+              "margin-desktop": "2.5rem",
+              "space-lg": "1.25rem",
+              "margin-tablet": "1.5rem",
+              "gutter-desktop": "1.5rem",
+              "space-sm": "0.5rem",
+              "space-xl": "2rem"
+            },
+            fontFamily: {
+              "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+              "display-xl": ["Plus Jakarta Sans", "sans-serif"],
+              "body-lg": ["Inter", "sans-serif"],
+              "display-xl-mobile": ["Plus Jakarta Sans", "sans-serif"],
+              "label-sm": ["JetBrains Mono", "monospace"],
+              "body-sm": ["Inter", "sans-serif"],
+              "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+              "code-sm": ["JetBrains Mono", "monospace"],
+              "label-md": ["JetBrains Mono", "monospace"],
+              "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+              "code-md": ["JetBrains Mono", "monospace"],
+              "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+              "body-md": ["Inter", "sans-serif"],
+              "code-lg": ["JetBrains Mono", "monospace"]
+            }
+          }
+        }
+      }
+    </script>
+    <style>.material-symbols-outlined{font-variation-settings:"FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;vertical-align:middle;line-height:1;display:inline-block}.neon-glow-primary{box-shadow:0 0 16px #b76dff47}.neon-glow-cyan{box-shadow:0 0 14px #4cd7f659}.neon-glow-emerald{box-shadow:0 0 14px #4edea359}.glass-card{-webkit-backdrop-filter:blur(16px);background:#141726b8;border:1px solid #ffffff14;box-shadow:inset 0 1px #ffffff14}.glass-card-interactive{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);background:#141726bf;border:1px solid #ffffff14;transition:all .2s cubic-bezier(.16,1,.3,1)}.glass-card-interactive:hover{border-color:#ddb7ff4d;transform:translateY(-1px)}@keyframes pulseGlow{0%,to{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}.ping-glow{animation:2.5s ease-in-out infinite pulseGlow}@keyframes flowingLine{0%{stroke-dashoffset:60px}to{stroke-dashoffset:0}}.flow-line{stroke-dasharray:6 6;animation:1.6s linear infinite flowingLine}::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:#0d0e13}::-webkit-scrollbar-thumb{background:#34343a;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#4d4354}</style>
+    <script type="module" crossorigin src="/assets/index-l6iB7rJs.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-7U3BEHuB.css">
+  </head>
+  <body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+    <div id="root"></div>
+  </body>
+</html>

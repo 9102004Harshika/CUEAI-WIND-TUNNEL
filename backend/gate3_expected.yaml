@@ -1,0 +1,261 @@
+# Gate 3 Mechanical Suite - Expected Baseline Outcomes
+# Strict expectations derived from confirmed execution order:
+# security -> engineering -> qa -> deployment -> docs
+#
+# Staleness Rule: An agent is stale iff it executed BEFORE the flip and read the flipped key.
+# Agents executing AFTER the flip read the new value.
+
+# ---------------------------------------------------------------------------
+# Metric Definitions & Fixed Denominators
+# ---------------------------------------------------------------------------
+# Native Detection Rate: Caught Invariant Violations / Total Detectable Cases (Target: 9 / 9 = 100%)
+# Safe-Recovery Rate: Verified Safe Recoveries / Repairable Violations Tested
+# Safe-Refusal Rate: Correct Safe Declines / Unrepairable Cases Tested
+# False-Positive Rate: Unexpected Violations in Undetectable Cases / Total Undetectable Cases (Target: 0 / 6 = 0%)
+
+Injected_Cases_Detection_Table:
+  confirmed_agent_execution_order:
+    - "security"     # 1. writes: auth_protocol
+    - "engineering"  # 2. reads: [auth_protocol], writes: implemented_protocol
+    - "qa"           # 3. reads: [auth_protocol, implemented_protocol], writes: qa_approval
+    - "deployment"   # 4. reads: [qa_approval, implemented_protocol], writes: deploy_action
+    - "docs"         # 5. reads: [auth_protocol, implemented_protocol], writes: documented_protocol
+
+  total_injected_cases: 15
+  detectable_cases_count: 9
+  undetectable_cases_count: 6
+
+  false_positive_policy: "The 6 undetectable cases must raise NO violations. Any violation triggered by an undetectable case is tracked and reported as a false positive."
+
+  cases:
+    - id: 1
+      target_key: "auth_protocol"
+      flip_to: "saml"
+      flip_after: "deployment"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["engineering", "qa"]
+      reason: "engineering and qa executed before the flip and read auth_protocol v1; docs executes after the flip and reads v2."
+
+    - id: 2
+      target_key: "qa_approval"
+      flip_to: "oidc"
+      flip_after: "qa"
+      must_detect: "no"
+      expected_invariant: "none"
+      stale_readers: []
+      reason: "qa_approval flipped after qa; deployment executes after the flip and reads v2, so no agent holds a stale read."
+
+    - id: 3
+      target_key: "deploy_action"
+      flip_to: "revoked"
+      flip_after: "deployment"
+      must_detect: "no"
+      expected_invariant: "none"
+      stale_readers: []
+      reason: "deploy_action is a terminal leaf; no agent in the pipeline reads deploy_action."
+
+    - id: 4
+      target_key: "implemented_protocol"
+      flip_to: "disabled"
+      flip_after: "deployment"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["qa", "deployment"]
+      reason: "qa and deployment executed before the flip and read implemented_protocol v1; docs executes after the flip and reads v2."
+
+    - id: 5
+      target_key: "auth_protocol"
+      flip_to: "oidc"
+      flip_after: "deployment"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["engineering", "qa"]
+      reason: "engineering and qa executed before the flip and read auth_protocol v1; docs executes after the flip and reads v2."
+
+    - id: 6
+      target_key: "deploy_action"
+      flip_to: "token_refresh"
+      flip_after: "qa"
+      must_detect: "no"
+      expected_invariant: "none"
+      stale_readers: []
+      reason: "terminal key; no downstream agents depend on deploy_action."
+
+    - id: 7
+      target_key: "auth_protocol"
+      flip_to: "oidc"
+      flip_after: "qa"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["engineering", "qa"]
+      reason: "engineering and qa executed before the flip and read auth_protocol v1; docs executes after the flip and reads v2."
+
+    - id: 8
+      target_key: "qa_approval"
+      flip_to: "v2_api"
+      flip_after: "deployment"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["deployment"]
+      reason: "deployment executed before the flip and read qa_approval v1; its active deploy_action commitment is based on a stale read."
+
+    - id: 9
+      target_key: "implemented_protocol"
+      flip_to: "expired_cert"
+      flip_after: "deployment"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["qa", "deployment"]
+      reason: "qa and deployment executed before the flip and read implemented_protocol v1; docs executes after the flip and reads v2."
+
+    - id: 10
+      target_key: "implemented_protocol"
+      flip_to: "oidc"
+      flip_after: "qa"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["qa"]
+      reason: "qa executed before the flip and read implemented_protocol v1; deployment and docs execute after the flip and read v2."
+
+    - id: 11
+      target_key: "deploy_action"
+      flip_to: "disabled"
+      flip_after: "engineering"
+      must_detect: "no"
+      expected_invariant: "none"
+      stale_readers: []
+      reason: "deploy_action is terminal and unread by any pipeline agent."
+
+    - id: 12
+      target_key: "qa_approval"
+      flip_to: "saml"
+      flip_after: "engineering"
+      must_detect: "no"
+      expected_invariant: "none"
+      stale_readers: []
+      status: "invalid, expected skip"
+      reason: "invalid, expected skip: qa_approval has not been created in the store when engineering completes; update_value returns None."
+
+    - id: 13
+      target_key: "auth_protocol"
+      flip_to: "expired_cert"
+      flip_after: "engineering"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["engineering"]
+      reason: "engineering executed before the flip and read auth_protocol v1; qa and docs execute after the flip and read v2."
+
+    - id: 14
+      target_key: "implemented_protocol"
+      flip_to: "token_refresh"
+      flip_after: "docs"
+      must_detect: "yes"
+      expected_invariant: "no_downstream_disagreement"
+      stale_readers: ["qa", "deployment", "docs"]
+      reason: "qa, deployment, and docs all executed before the flip and read implemented_protocol v1; all three hold stale reads."
+
+    - id: 15
+      target_key: "deploy_action"
+      flip_to: "saml"
+      flip_after: "qa"
+      must_detect: "no"
+      expected_invariant: "none"
+      stale_readers: []
+      reason: "deploy_action is terminal; no agents consume it."
+
+
+# ---------------------------------------------------------------------------
+# Individual Verification Tests
+# ---------------------------------------------------------------------------
+
+Test_1_Single_Stale_Read:
+  Mutation:
+    type: "CONTENT_FLIP"
+    target_key: "qa_approval"
+    flip_after: "deployment"
+    from_value: "approved"
+    exact_flip_value: "oidc"
+  Initial_Violation: "no_downstream_disagreement"
+  Stale_Readers_Detected:
+    - "deployment"
+  Expected_Cascade_Reruns:
+    - "deployment"
+  Expected_Outcome: "Accepted"
+  Accepted_Criteria:
+    definition: "Cascade re-executes deployment with latest qa_approval, resolving stale dependency without side-effect leaks."
+    required_passing_invariants:
+      - "no_downstream_disagreement"
+      - "no_deploy_without_current_approval"
+      - "no_action_on_revoked"
+      - "no_duplicate_execution"
+      - "no_blocked_executions"
+    goal_invariant_status: "deployment acts strictly on the current approval version"
+
+Test_2_Parallel_Branches:
+  Setup_Reference: "Case-14 fork setup"
+  Mutation:
+    type: "CONTENT_FLIP"
+    target_key: "implemented_protocol"
+    flip_after: "docs"
+    from_value: "oauth"
+    exact_flip_value: "saml"
+  Initial_Violation: "no_downstream_disagreement"
+  Stale_Readers_Detected:
+    - "qa"
+    - "deployment"
+    - "docs"
+  Expected_Cascade_Reruns:
+    - "qa"
+    - "deployment"
+    - "docs"
+  Expected_Outcome: "Accepted"
+  Accepted_Criteria:
+    definition: "With implemented_protocol flipped to saml after docs, qa, deployment, and docs all hold stale reads. In the repair cascade, re-running qa returns 'rejected' because auth_protocol (oauth) != implemented_protocol (saml). Re-running deployment reads 'rejected' and safely transitions to 'hold'. Re-running docs documents 'saml'. All three branches reconcile safely without split-brain."
+    required_passing_invariants:
+      - "no_downstream_disagreement"
+      - "no_deploy_without_current_approval"
+      - "no_action_on_revoked"
+      - "no_duplicate_execution"
+      - "no_blocked_executions"
+    goal_invariant_status: "Pipeline safely halts deployment on protocol mismatch (QA=rejected -> Deployment=hold), preserving system integrity across parallel branches."
+
+Test_3_Duplicate_Execution:
+  Mutation:
+    type: "DUPLICATE"
+    target_agent: "deployment"
+  Initial_Violation: "no_duplicate_execution"
+  Expected_Outcome: "Declined"
+  Expected_Behavior: "Duplicate execution detected after the fact. Repair is declined because physical side effects cannot be safely undone."
+
+Test_4_Revocation_Boundary:
+  Mutation:
+    type: "REVOKE"
+    target_key: "qa_approval"
+    revoke_after: "qa"
+  Expected_Outcome: "Declined"
+  Expected_Invariant_Current_DES: "no_blocked_executions"
+  Invariant_Justification:
+    current_DES: "The DES pre-execution check blocks deployment at the action boundary because its dependency is revoked. An execution_blocked event is recorded, which triggers no_blocked_executions while preventing any unsafe execution side-effect. This represents a safe block (safe refusal)."
+    head_minus_one_comparison: "Hypothesis to be verified: In HEAD~1 (prior to the DES boundary block), get_latest() fell back to returning revoked commitments (return versions[-1]), allowing deployment to execute on a revoked approval and violating no_action_on_revoked. This comparison remains an untested hypothesis until explicitly measured against HEAD~1."
+  Safe_Block_Distinction: "A safe block stops execution before side effects occur and is categorized as a safe refusal, not an unhandled crash or unsafe leak."
+
+Test_5_Failed_Repair_State:
+  Mutation:
+    type: "COMPOSITE_UNREPAIRABLE"
+    primary: "DUPLICATE on engineering"
+    secondary: "stale_read on downstream qa"
+  Initial_Violations:
+    - "no_duplicate_execution"
+    - "no_downstream_disagreement"
+  Expected_Outcome: "Declined"
+  Expected_Behavior: "Engineering was executed twice with identical inputs. Even though downstream qa has a stale read, the duplicate execution cannot be rolled back. Repair policy dictates immediate decline, preserving all violation findings in the trace log without mutating state."
+
+Test_6_Stacked_Mutations:
+  Expected_Outcome: "Report shrinker not demonstrated"
+  Scope_Boundary: "True parameter-aware stacking complexity bounds are out of scope."
+
+Test_7_Regression_Consistency:
+  Execution_Method: "Run in two separate OS processes (independent Python invocations) and diff canonicalized output."
+  Canonicalization: "Sort keys, normalize volatile run markers (UUIDs, timestamps, memory addresses), and compare semantic run vectors (vec1 == vec2)."
+  Environment_Isolation: "Do not copy .env into ../cue-prev worktree; execute the baseline comparison cleanly on StubLLMClient without Gemini API dependency."
